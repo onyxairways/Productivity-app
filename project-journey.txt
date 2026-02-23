@@ -680,7 +680,8 @@ MEDIUM TERM:
   END OF DOCUMENT
 ================================================================================
 
-  This file was generated to support learning and serve as a reference.
-  Update it as the project progresses. Knowledge written down doesn't fade.
+  This file is to support learning and serve as a reference.
+  It will be updated as the project progresses. 
+  #Knowledge written down doesn't fade.
 
 ================================================================================
