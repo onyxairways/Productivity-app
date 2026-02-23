@@ -1,0 +1,74 @@
+# =============================================================================
+# PYTHON / BACKEND
+# =============================================================================
+
+# Compiled Python files — generated automatically, never need to be committed
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments (if you ever use venv instead of Conda)
+.venv/
+venv/
+env/
+
+# Python egg/distribution files (created when packaging Python projects)
+*.egg-info/
+dist/
+build/
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+
+# SQLite database file — this contains real data and should not be in version control
+# Each developer/environment should have their own local copy
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# ENVIRONMENT & SECRETS
+# =============================================================================
+
+# Environment variable files — these often contain secrets (API keys, passwords)
+# NEVER commit these
+.env
+.env.local
+.env.*.local
+
+# =============================================================================
+# FRONTEND (Angular / Node)
+# =============================================================================
+
+# Node modules — installed via npm, never committed (too large, reproducible via npm install)
+node_modules/
+
+# Angular build output — generated files, not source
+dist/
+.angular/
+
+# =============================================================================
+# MACOS
+# =============================================================================
+
+# macOS system files — invisible on Mac but noisy in repos on other systems
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# =============================================================================
+# VS CODE
+# =============================================================================
+
+# VS Code workspace settings — personal editor preferences, not project config
+.vscode/
+*.code-workspace
+
+# =============================================================================
+# LOGS & TEMPORARY FILES
+# =============================================================================
+
+*.log
+*.tmp
+*.temp

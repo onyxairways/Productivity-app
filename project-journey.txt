@@ -1,0 +1,686 @@
+================================================================================
+  PRODUCTIVITY APP — FULL PROJECT JOURNEY & LEARNING LOG
+  Author: Tee
+  Last Updated: February 2026
+================================================================================
+
+This document is a record of everything that has been set up, decided, and built
+for the productivity-app project. It is written to support my learning — not
+just recording *what* was done, but *why* each decision was made.
+
+Read this top to bottom when returning after a break, or jump to a section you
+need to refresh on.
+
+================================================================================
+  TABLE OF CONTENTS
+================================================================================
+
+  0.  Project Roadmap & Engineering Tracker
+      → Strategic overview of all development phases
+      → High-level task tracking across lifecycle
+
+  1.  Project Vision
+      → Purpose of the app
+      → Architectural goals
+      → Learning objectives
+
+  2.  High-Level Architecture Decisions
+      → Why specific tools were chosen
+      → Backend/frontend separation rationale
+      → Environment strategy decisions
+
+  3.  Phase 1: Python Environment Setup
+      → Conda installation
+      → Environment creation
+      → Python version isolation
+
+  4.  Phase 2: Backend Setup (FastAPI)
+      → FastAPI installation
+      → First endpoint
+      → Backend server configuration
+      → Environment snapshot milestone
+
+  5.  Phase 3: Node.js & Frontend Tooling Setup
+      → nvm setup
+      → Node LTS installation
+      → Angular CLI installation
+
+  6.  Current Project State (Dashboard)
+      → Snapshot of completed work
+      → Current active phase
+      → Immediate development focus
+
+  7.  How To Resume After A Break
+      → Exact commands to restart backend
+      → Environment activation steps
+
+  8.  Glossary Of Key Terms
+      → Definitions of technical concepts used throughout document
+
+  9.  Development Plan (Detailed Action Plan)
+      → Step-by-step execution order for current and upcoming phases
+      → Backend Core tasks
+      → Frontend Initialisation tasks
+      → Medium-term architectural decisions
+
+================================================================================
+  PROJECT ROADMAP & ENGINEERING TRACKER
+================================================================================
+
+Legend:
+  [✔] Complete
+  [~] In Progress
+  [ ] Not Started
+
+----------------------------------------------------------------------
+PHASE 0 — FOUNDATIONS (Environment & Tooling)
+----------------------------------------------------------------------
+
+  [✔] macOS setup
+  [✔] iTerm2 configured
+  [✔] VS Code installed
+  [✔] Miniconda installed
+  [✔] Base auto-activation disabled
+  [✔] Conda environment created (productivity_app1)
+  [✔] Python 3.11.14 verified
+  [✔] FastAPI installed
+  [✔] Uvicorn installed
+  [✔] Backend folder structure created
+  [✔] Root endpoint working
+  [✔] Swagger verified
+  [✔] nvm installed
+  [✔] Node 20.20.0 (LTS) installed
+  [✔] Angular CLI 21.1.4 installed
+  [✔] environment.yml exported
+  [✔] environment.lock.yml exported
+  [✔] requirements.txt generated
+
+Status: Stable, reproducible, professional baseline established.
+
+----------------------------------------------------------------------
+PHASE 1 — BACKEND CORE DEVELOPMENT
+----------------------------------------------------------------------
+
+  [✔] Basic API running
+  [ ] Add CORS middleware
+  [ ] Define data models (Pydantic schemas)
+  [ ] Introduce SQLite database
+  [ ] Create persistent Task model
+  [ ] CRUD endpoints (Create / Read / Update / Delete)
+  [ ] Basic validation & error handling
+
+Goal: Backend capable of storing and retrieving real task data.
+
+----------------------------------------------------------------------
+PHASE 2 — FRONTEND INITIALISATION
+----------------------------------------------------------------------
+
+  [ ] Create Angular project inside frontend/
+  [ ] Run Angular dev server
+  [ ] Basic layout scaffold
+  [ ] Angular service for API communication
+  [ ] First GET request to FastAPI backend
+  [ ] Display backend response in UI
+
+Goal: Full-stack communication verified.
+
+----------------------------------------------------------------------
+PHASE 3 — FEATURE DEVELOPMENT
+----------------------------------------------------------------------
+
+  [ ] Task list UI
+  [ ] Task creation form
+  [ ] Mark task complete
+  [ ] Delete task
+  [ ] Basic UI styling improvements
+
+----------------------------------------------------------------------
+PHASE 4 — PROFESSIONAL HARDENING
+----------------------------------------------------------------------
+
+  [ ] Environment variables strategy
+  [ ] Error handling standardisation
+  [ ] Logging strategy
+  [ ] Production configuration
+  [ ] Deployment
+  [ ] Optional AI-assisted features  
+
+================================================================================
+  1. PROJECT VISION
+================================================================================
+
+The productivity-app is being built with two goals running in parallel:
+
+  A) A REAL, working productivity application (not a toy or tutorial project)
+  B) A LEARNING VEHICLE for modern full-stack development practices
+
+This means the process matters as much as the outcome. Every decision has been
+made deliberately, so that I understand *why* the project is structured the
+way it is — not just how to run it.
+
+Target Stack:
+  - Frontend:  Angular (JavaScript framework, runs in the browser)
+  - Backend:   FastAPI (Python web framework, runs on the server)
+  - Comms:     HTTP/JSON API (frontend calls backend over the network)
+
+This is a very common, professional architecture used in real-world applications.
+
+================================================================================
+  2. HIGH-LEVEL ARCHITECTURE DECISIONS
+================================================================================
+
+DECISION: Separate frontend and backend folders
+-----------------------------------------------
+WHY: In professional projects, the frontend and backend are treated as separate
+applications that happen to work together. Keeping them in separate folders
+enforces this separation. It also means each half can be worked on, tested, and
+deployed independently.
+
+DECISION: Python managed with Miniconda (not system Python)
+-----------------------------------------------------------
+WHY: macOS comes with its own Python installation, and it belongs to the OS —
+you should never install packages into it. Miniconda lets you create isolated
+"environments", each with their own Python version and packages. This mirrors
+professional workflows and prevents accidental pollution of your system.
+
+DECISION: A dedicated Conda environment (not the base environment)
+-----------------------------------------------------------------
+WHY: The Conda "base" environment is a fallback, not a workspace. Installing
+packages into base is messy and hard to undo. By creating a project-specific
+environment (productivity_app1), everything stays contained and reproducible.
+
+DECISION: Disable auto-activation of base environment
+------------------------------------------------------
+WHY: If base activates automatically every time you open a terminal, it's easy
+to accidentally install packages into the wrong place. Requiring manual
+activation means you always know exactly which environment you're working in.
+
+DECISION: Node managed with nvm (not a direct install)
+------------------------------------------------------
+WHY: Node.js versions change frequently. nvm (Node Version Manager) lets you
+install and switch between versions without affecting the system. This is the
+standard approach in professional frontend development.
+
+DECISION: Use Node LTS (Long Term Support) only
+-----------------------------------------------
+WHY: LTS versions are the stable, well-tested releases that major frameworks
+like Angular officially support. Cutting-edge Node versions may have
+compatibility issues. LTS = reliability.
+
+DECISION: README.md as the single source of truth
+--------------------------------------------------
+WHY: Memory fades. Notes get lost. The README.md in the project root acts as
+living documentation — updated as the project grows. Pasting it into an AI
+assistant at the start of a new session restores full context instantly.
+
+================================================================================
+  3. PHASE 1: PYTHON ENVIRONMENT SETUP
+================================================================================
+
+WHAT IS MINICONDA?
+------------------
+Miniconda is a minimal installer for Conda — a package and environment manager.
+Think of it like a "container" system for Python projects. Each environment is
+an isolated bubble with its own Python and its own libraries.
+
+Installed at: ~/miniconda3
+
+STEP 1: Install Miniconda
+  - Downloaded the macOS Apple Silicon (arm64) installer from the Conda website
+  - Ran the installer in the terminal
+  - Miniconda added itself to the shell (zsh) via ~/.zshrc
+
+STEP 2: Disable auto-activation of the base environment
+  Command run:
+    conda config --set auto_activate_base false
+
+  WHY: Prevents accidentally working in the base environment by default.
+  After this change, you start every terminal session with NO Conda environment
+  active. You must explicitly activate one.
+
+STEP 3: Create a project-specific Conda environment
+  Command run:
+    conda create -n productivity_app1 python=3.11
+
+  WHAT THIS DOES:
+    - Creates a new isolated environment named "productivity_app1"
+    - Installs Python 3.11 into it (not the system Python, a fresh copy)
+    - The environment lives at: ~/miniconda3/envs/productivity_app1/
+
+STEP 4: Activate the environment
+  Command run:
+    conda activate productivity_app1
+
+  You'll know it's working when your terminal prompt changes to show:
+    (productivity_app1) your-machine ~ %
+
+  IMPORTANT: This must be done every time you open a new terminal session.
+  Nothing installs or runs correctly for the backend unless this is active.
+
+VERIFIED:
+  - Python version: 3.11.14
+  - Environment is isolated from system Python ✓
+
+================================================================================
+  4. PHASE 2: BACKEND SETUP (FASTAPI)
+================================================================================
+
+WHAT IS FASTAPI?
+----------------
+FastAPI is a modern Python web framework for building APIs. An API (Application
+Programming Interface) is essentially a set of rules that allows two pieces of
+software to talk to each other. In this project, the Angular frontend will send
+requests to the FastAPI backend, which will respond with data (in JSON format).
+
+FastAPI was chosen because:
+  - It's fast and modern
+  - It automatically generates interactive documentation (Swagger UI)
+  - It uses Python type hints, which helps catch bugs early
+  - It's widely used in industry
+
+WHAT IS UVICORN?
+----------------
+FastAPI doesn't run on its own — it needs a server. Uvicorn is an ASGI server
+(Asynchronous Server Gateway Interface) that handles incoming HTTP requests and
+passes them to FastAPI. Think of Uvicorn as the "engine" and FastAPI as the
+"brain".
+
+STEP 1: Install FastAPI and Uvicorn
+  (With productivity_app1 environment active)
+  Command run:
+    pip install fastapi uvicorn
+
+  Packages installed:
+    - fastapi 0.129.0       — the web framework
+    - uvicorn 0.41.0        — the server
+    + several auto-dependencies (starlette, pydantic, anyio, etc.)
+
+  These dependencies are normal — FastAPI relies on them internally. You didn't
+  install them explicitly; pip pulled them in automatically.
+
+STEP 2: Create the project folder structure
+  Folder structure created:
+    productivity-app/
+    ├── backend/
+    │   └── app/
+    │       └── main.py     ← the backend application lives here
+    ├── frontend/           ← empty for now (Angular goes here later)
+    ├── Miscellaneous/      ← notes, screenshots
+    ├── README.md
+    └── project-journey.txt ← this file!
+
+STEP 3: Write the first backend endpoint
+  File: backend/app/main.py
+
+  Contents:
+  ---
+  from fastapi import FastAPI
+
+  app = FastAPI()
+
+  @app.get("/")
+  def root():
+      return {"status": "ok", "message": "Backend running"}
+  ---
+
+  WHAT THIS DOES (line by line):
+    from fastapi import FastAPI
+      → Imports the FastAPI class from the library you installed
+
+    app = FastAPI()
+      → Creates an instance of the application. This is the object that
+        handles all incoming requests.
+
+    @app.get("/")
+      → This is a "decorator" — it registers the function below it as the
+        handler for HTTP GET requests to the "/" path (the root URL).
+        GET is the HTTP method used when a browser or client wants to
+        *retrieve* data.
+
+    def root():
+      → A regular Python function. FastAPI calls this when "/" is requested.
+
+    return {"status": "ok", "message": "Backend running"}
+      → Returns a Python dictionary. FastAPI automatically converts this to
+        JSON format, which is what APIs return.
+
+STEP 4: Run the backend server
+  (From inside the backend/ folder, with productivity_app1 active)
+  Command run:
+    uvicorn app.main:app --reload
+
+  WHAT THIS MEANS:
+    uvicorn         → start the uvicorn server
+    app.main        → look in the "app" folder, find "main.py"
+    :app            → use the object named "app" inside main.py
+    --reload        → automatically restart the server when you save changes
+                      (great for development, not used in production)
+
+STEP 5: Verify it works
+  Opened in browser:
+    http://127.0.0.1:8000       → returns: {"status":"ok","message":"Backend running"}
+    http://127.0.0.1:8000/docs  → opens Swagger UI (auto-generated documentation)
+
+  WHAT IS 127.0.0.1?
+  This is the "loopback" IP address — it always refers to your own machine.
+  "localhost" is the human-readable alias for it. Port 8000 is where Uvicorn
+  listens by default.
+
+CURRENT STATUS: Backend is working ✓
+
+================================================================================
+  ENVIRONMENT SNAPSHOT PHASE (IMPORTANT MILESTONE)
+================================================================================
+
+At this stage, the environment was exported and locked.
+
+Three files now exist:
+
+  environment.yml
+    → Portable snapshot (no build hashes)
+    → Best for recreating environment on different machines
+
+  environment.lock.yml
+    → Exact snapshot including build strings
+    → Used for identical machine rebuilds
+
+  requirements.txt
+    → pip freeze output
+    → Records Python packages installed via pip
+
+WHY THIS MATTERS:
+
+Professional software projects must be reproducible.
+If the environment cannot be recreated exactly, debugging becomes impossible.
+
+This project now has:
+  - Version-locked Python
+  - Node version controlled via nvm (20.20.0 LTS)
+  - Exported Conda state
+  - Captured pip dependencies
+
+This marks the transition from "learning setup" to
+"professional development workflow".
+
+================================================================================
+  5. PHASE 3: NODE.JS & FRONTEND TOOLING SETUP
+================================================================================
+
+WHAT IS NODE.JS?
+----------------
+Node.js is a JavaScript runtime — it lets you run JavaScript outside of a
+browser, on your machine or a server. It's required for Angular because the
+Angular build tools are written in JavaScript and run via Node.
+
+WHAT IS NPM?
+------------
+npm (Node Package Manager) comes bundled with Node.js. It's the equivalent of
+pip for the JavaScript ecosystem — you use it to install libraries and tools.
+
+WHAT IS NVM?
+------------
+nvm (Node Version Manager) is like Conda, but for Node.js. It lets you install
+multiple versions of Node and switch between them. This is essential because
+different projects may require different Node versions.
+
+STEP 1: Install nvm
+  Installed nvm version: 0.39.7
+  nvm adds itself to ~/.zshrc so it's available in every terminal session.
+
+STEP 2: Install Node.js LTS via nvm
+  Command run:
+    nvm install --lts
+
+  This installs the latest Long Term Support version of Node.js.
+  Installed version: Node.js 20.20.0 with npm 10.8.2
+
+  WHY LTS: Angular's compatibility is tested against LTS versions.
+  Using the latest non-LTS version risks unexpected errors.
+
+STEP 3: Set LTS as the default
+  Command run:
+    nvm alias default 20.20.0
+
+  This ensures that every new terminal session uses Node 20 by default,
+  without needing to manually select it each time.
+
+STEP 4: Install Angular CLI globally
+  Command run:
+    npm install -g @angular/cli
+
+  WHAT IS THE ANGULAR CLI?
+  The Angular CLI (Command Line Interface) is a tool that helps you:
+    - Create new Angular projects (ng new)
+    - Generate components, services, and other Angular building blocks (ng generate)
+    - Run a local development server (ng serve)
+    - Build the project for production (ng build)
+
+  Installing it globally (-g) means the "ng" command is available everywhere
+  on your machine, not just inside one project folder.
+
+  Installed version: Angular CLI 21.1.4
+
+STEP 5: Verify everything
+  Verified with:
+    node --version    → v20.20.0
+    npm --version     → 10.8.2
+    ng version        → Angular CLI: 21.1.4
+
+CURRENT STATUS: Node.js tooling ready. Angular app NOT YET initialised. ✓
+
+NOTE: The frontend/ folder is intentionally empty at this point.
+The Angular project will be created inside it in the next phase.
+
+================================================================================
+  6. CURRENT PROJECT STATE (Dashboard View)
+================================================================================
+
+  ✅ DONE
+  --------
+  - Miniconda installed and configured
+  - Conda environment (productivity_app1) created
+  - Python 3.11.14 installed inside environment
+  - FastAPI installed (0.129.0)
+  - Uvicorn installed (0.41.0)
+  - Backend folder structure created
+  - First API endpoint written and verified
+  - Swagger documentation verified
+  - nvm installed
+  - Node.js 20.20.0 (LTS) installed and set as default
+  - Angular CLI 21.1.4 installed globally
+  - environment.yml created (portable snapshot)
+  - environment.lock.yml created (exact build snapshot)
+  - requirements.txt generated (pip freeze)
+  - README aligned as operational reference
+
+  🟡 READY TO CONTINUE
+
+Currently entering: Phase 1 — Backend Core Development
+
+Immediate focus:
+  - Add CORS middleware to FastAPI backend
+  - Define Pydantic data models
+  - Introduce SQLite database
+  - Implement CRUD endpoints
+  - Verify backend persistence via Swagger
+
+Upcoming (Phase 2 — Frontend Initialisation):
+  - Initialise Angular project inside frontend/
+  - Run Angular dev server
+  - Connect Angular → FastAPI via HTTP call
+
+  ❌ NOT STARTED (INTENTIONAL)
+  ------------------------------
+  - Angular app creation
+  - Frontend ↔ Backend integration
+  - Database layer (SQLite)
+  - Authentication
+  - Production configuration
+  - Deployment
+
+CHECKPOINT STATUS:
+
+The backend environment is now fully reproducible.
+The project can be cloned and restored on another machine without reinstalling tools.
+This marks the end of the foundational setup phase.
+
+================================================================================
+  7. HOW TO RESUME AFTER A BREAK
+================================================================================
+
+Every time you return to this project, follow these steps:
+
+STEP 1: Open your terminal (iTerm2)
+
+STEP 2: Activate your Conda environment
+  conda activate productivity_app1
+
+STEP 3: Navigate to the backend folder
+  cd ~/Projects/dev/productivity-app/backend
+
+STEP 4: Start the backend server
+  uvicorn app.main:app --reload
+
+STEP 5: Verify it's running
+  Open: http://127.0.0.1:8000
+  Should return: {"status":"ok","message":"Backend running"}
+
+STEP 6: Open the project in VS Code
+  code ~/Projects/dev/productivity-app
+
+STEP 7: Read this file or the README.md to re-orient yourself before coding.
+
+IMPORTANT: You do NOT need to reinstall anything. The environment is preserved
+between sessions. As long as you activate it correctly, everything will be there.
+
+================================================================================
+  8. GLOSSARY OF KEY TERMS
+================================================================================
+
+API
+  Application Programming Interface. A defined set of rules for how two pieces
+  of software communicate. In this project, the frontend sends HTTP requests to
+  the backend API and receives JSON responses.
+
+JSON
+  JavaScript Object Notation. A lightweight text format for sending data between
+  systems. Looks like: {"key": "value", "number": 42}. Both humans and machines
+  can read it easily.
+
+HTTP / HTTPS
+  HyperText Transfer Protocol. The communication protocol used on the web.
+  GET = retrieve data. POST = send data. PUT = update data. DELETE = remove data.
+
+CORS
+  Cross-Origin Resource Sharing. A browser security feature that blocks
+  JavaScript on one domain from making requests to a different domain. Since
+  Angular (port 4200) and FastAPI (port 8000) run on different ports, CORS
+  middleware must be added to FastAPI to allow this.
+
+Conda Environment
+  An isolated Python installation with its own packages. Prevents conflicts
+  between different projects that may need different library versions.
+
+nvm
+  Node Version Manager. Lets you install and switch between Node.js versions.
+
+LTS
+  Long Term Support. A version of software that receives extended maintenance
+  and security updates. Preferred for stability.
+
+CLI
+  Command Line Interface. A text-based interface for running commands.
+  The Angular CLI is the "ng" command; Uvicorn is run from the terminal.
+
+Uvicorn
+  The web server that runs the FastAPI app. It listens for incoming HTTP
+  requests and passes them to FastAPI for processing.
+
+Decorator (@)
+  In Python, a decorator is a way to modify or register a function.
+  @app.get("/") tells FastAPI: "when someone sends a GET request to '/',
+  call the function below."
+
+Swagger UI
+  Auto-generated interactive documentation for your API. FastAPI creates it
+  automatically. Access it at: http://127.0.0.1:8000/docs
+
+127.0.0.1 / localhost
+  The loopback address — always refers to your own machine. When the server
+  is running, this is how you access it from your own browser.
+
+================================================================================
+  9. DEVELOPMENT PLAN (Detailed Action Plan)
+================================================================================
+
+IMMEDIATE NEXT STEPS (in order):
+
+PHASE 1 — BACKEND CORE DEVELOPMENT
+
+  1. Add CORS middleware to FastAPI
+     WHY: Required before any frontend can communicate with the backend.
+     WHERE: backend/app/main.py
+
+  2. Define data models (Pydantic schemas)
+     WHY: Establish a clear data contract before introducing persistence.
+     WHERE: backend/app/
+
+  3. Introduce SQLite database
+     WHY: Replace static responses with persistent storage.
+     TOOL: SQLite (file-based, no external server required)
+
+  4. Implement CRUD endpoints
+     WHY: Enable Create, Read, Update, Delete operations for tasks.
+     RESULT: Backend becomes functionally useful.
+
+  5. Verify backend functionality via Swagger
+     WHY: Confirm data persistence works before building frontend.
+
+
+PHASE 2 — FRONTEND INITIALISATION
+
+  6. Initialise the Angular project
+     WHY: Frontend should be created once backend structure is stable.
+     COMMAND: ng new productivity-app --directory frontend
+
+  7. Run the Angular development server
+     COMMAND: ng serve
+     URL: http://localhost:4200
+
+  8. Create Angular service for API communication
+
+  9. Make the first API call from Angular to FastAPI
+     WHY: This proves the full stack is connected end-to-end.
+     HOW: Use Angular's HttpClient to send a GET request to http://127.0.0.1:8000/
+
+MEDIUM TERM:
+
+    - Maintain environment lock files
+      environment.yml
+      environment.lock.yml
+      requirements.txt
+
+      WHY:
+      These files now exist and must be updated whenever dependencies change.
+      They ensure the project remains reproducible across machines.
+
+  - Decide on state management (Angular)
+      Options: Angular services (simple), NgRx (complex, Redux-style)
+      Recommendation: Start with services, migrate later if needed
+
+  - Decide on persistence layer
+      SQLite is likely the right starting point — it's file-based, no server
+      needed, and FastAPI integrates with it easily via SQLAlchemy
+
+  - Authentication strategy
+      Leave this for later — it's complex and not needed to get the basic
+      stack working
+
+================================================================================
+  END OF DOCUMENT
+================================================================================
+
+  This file was generated to support learning and serve as a reference.
+  Update it as the project progresses. Knowledge written down doesn't fade.
+
+================================================================================

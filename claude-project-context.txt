@@ -1,0 +1,54 @@
+PROJECT CONTEXT — READ FIRST
+
+Goal:
+Build a full-stack productivity / task app to learn Python (backend), Angular (frontend), and core full-stack concepts, with the ability to add AI features later.
+
+High-level plan:
+1. Environment setup (safe, clean dev setup on macOS)
+2. Python basics → backend fundamentals
+3. Python API (FastAPI preferred)
+4. SQLite database
+5. Angular frontend
+6. Connect frontend ↔ backend
+7. Add productivity features (priority, due dates, completion)
+8. Add basic AI-style features later
+9. Polish & deploy
+
+Current system:
+- macOS (Apple Silicon MacBook Air)
+- zsh shell
+- iTerm2 will be used as the main terminal
+- VS Code for editing
+- Claude Code installed via install.sh
+- Claude binary location: ~/.local/bin/claude
+- PATH updated in ~/.zshrc
+- `claude --help` works
+
+Project structure (already created):
+~/dev/productivity-app/
+├── backend/
+└── frontend/
+
+Important preferences:
+- I want small, testable steps
+- I want exact commands, not vague instructions
+- I prefer understanding over copy-paste magic
+- I want to avoid breaking system Python
+- I am learning, but I work in IT and can handle technical detail
+- Momentum matters more than perfection
+
+What I want next:
+- Choose Python environment strategy (Miniconda vs venv)
+- Set up backend first (FastAPI)
+- Create the smallest working API endpoint (/health)
+- Run backend locally
+- Then move to frontend
+
+Rules for the assistant:
+- Be structured
+- Don’t skip steps
+- Explain *why* briefly when it matters
+- Ask before making big tooling decisions
+- Treat this like a real project, not a tutorial
+
+END CONTEXT
