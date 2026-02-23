@@ -25,9 +25,14 @@ Current folder structure:
 productivity-app/
 ├── backend/
 │   └── app/
-│       └── main.py
+│       ├── __init__.py      # Marks app/ as a Python package
+│       ├── main.py          # FastAPI app, CORS, all API routes
+│       ├── models.py        # Pydantic schemas (API data shapes)
+│       ├── database.py      # SQLite connection, SQLAlchemy table definition
+│       └── crud.py          # Database logic (Create, Read, Update, Delete)
 ├── frontend/                # Empty (Angular not initialised yet)
-├── Miscellaneous/           # Empty (notes/screenshots)
+├── Miscellaneous/
+│   └── backend-code-reference.md  # Plain-language code explanation
 ├── environment.yml          # Portable Conda snapshot
 ├── environment.lock.yml     # Exact Conda build snapshot
 ├── requirements.txt         # pip freeze output
@@ -91,6 +96,7 @@ python --version
 Core stack:
 - fastapi 0.129.0
 - uvicorn 0.41.0
+- sqlalchemy (installed during Phase 1)
 
 Additional dependencies installed automatically:
 - starlette
@@ -113,18 +119,24 @@ All versions are captured in:
 
 ## 4. Backend Application
 
-File:
-backend/app/main.py
+Phase 1 complete. The backend is a fully functional REST API with persistent SQLite storage.
 
-Current contents:
+Files:
+- backend/app/main.py      — FastAPI app, CORS middleware, all API routes
+- backend/app/models.py    — Pydantic schemas: TaskCreate (input), TaskResponse (output)
+- backend/app/database.py  — SQLite setup via SQLAlchemy, TaskDB table, get_db() session dependency
+- backend/app/crud.py      — get_tasks, get_task, create_task, update_task, delete_task
+- backend/app/__init__.py  — empty file that marks app/ as a Python package
 
-from fastapi import FastAPI
+Database file (auto-created on first run):
+- backend/tasks.db
 
-app = FastAPI()
-
-@app.get("/")
-def root():
-    return {"status": "ok", "message": "Backend running"}
+API endpoints:
+- GET    /           → health check
+- GET    /tasks      → return all tasks
+- POST   /tasks      → create a new task
+- PUT    /tasks/{id} → update completed status
+- DELETE /tasks/{id} → delete a task
 
 Run backend:
 
@@ -137,7 +149,7 @@ http://127.0.0.1:8000
 http://127.0.0.1:8000/docs
 
 Status:
-Backend confirmed working.
+Backend fully working and verified via Swagger.
 
 ---
 
@@ -200,12 +212,15 @@ No reinstall required.
 
 ## 8. Current Project Position
 
-✅ Environment setup complete  
-✅ Backend working and verified  
-✅ Environment fully version-locked  
-🟡 CORS not yet added  
-🟡 Angular not yet initialised  
-❌ Frontend ↔ backend integration not started  
+✅ Environment setup complete
+✅ Backend working and verified
+✅ Environment fully version-locked
+✅ CORS middleware added
+✅ Pydantic data models defined
+✅ SQLite database connected (SQLAlchemy)
+✅ Full CRUD API built and verified via Swagger
+🟡 Angular not yet initialised
+❌ Frontend ↔ backend integration not started
 
 ================================================================================
   END OF DOCUMENT

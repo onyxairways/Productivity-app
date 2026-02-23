@@ -102,14 +102,15 @@ PHASE 1 — BACKEND CORE DEVELOPMENT
 ----------------------------------------------------------------------
 
   [✔] Basic API running
-  [ ] Add CORS middleware
-  [ ] Define data models (Pydantic schemas)
-  [ ] Introduce SQLite database
-  [ ] Create persistent Task model
-  [ ] CRUD endpoints (Create / Read / Update / Delete)
-  [ ] Basic validation & error handling
+  [✔] Add CORS middleware
+  [✔] Define data models (Pydantic schemas)
+  [✔] Introduce SQLite database
+  [✔] Create persistent Task model
+  [✔] CRUD endpoints (Create / Read / Update / Delete)
+  [✔] Basic validation & error handling
 
 Goal: Backend capable of storing and retrieving real task data.
+Status: COMPLETE ✓
 
 ----------------------------------------------------------------------
 PHASE 2 — FRONTEND INITIALISATION
@@ -482,6 +483,7 @@ The Angular project will be created inside it in the next phase.
   - Python 3.11.14 installed inside environment
   - FastAPI installed (0.129.0)
   - Uvicorn installed (0.41.0)
+  - SQLAlchemy installed (Phase 1)
   - Backend folder structure created
   - First API endpoint written and verified
   - Swagger documentation verified
@@ -492,37 +494,40 @@ The Angular project will be created inside it in the next phase.
   - environment.lock.yml created (exact build snapshot)
   - requirements.txt generated (pip freeze)
   - README aligned as operational reference
+  - CORS middleware added to FastAPI
+  - Pydantic data models defined (TaskCreate, TaskResponse)
+  - SQLite database connected via SQLAlchemy (tasks.db)
+  - TaskDB table defined (id, title, description, completed)
+  - CRUD functions written (get_tasks, create_task, update_task, delete_task)
+  - Full REST API built and verified via Swagger
+  - app/ marked as Python package (__init__.py)
+  - backend-code-reference.md created in Miscellaneous/
 
   🟡 READY TO CONTINUE
 
-Currently entering: Phase 1 — Backend Core Development
+Currently entering: Phase 2 — Frontend Initialisation
 
 Immediate focus:
-  - Add CORS middleware to FastAPI backend
-  - Define Pydantic data models
-  - Introduce SQLite database
-  - Implement CRUD endpoints
-  - Verify backend persistence via Swagger
-
-Upcoming (Phase 2 — Frontend Initialisation):
   - Initialise Angular project inside frontend/
   - Run Angular dev server
-  - Connect Angular → FastAPI via HTTP call
+  - Create Angular service for API communication
+  - Connect Angular → FastAPI via HTTP
 
   ❌ NOT STARTED (INTENTIONAL)
   ------------------------------
   - Angular app creation
   - Frontend ↔ Backend integration
-  - Database layer (SQLite)
   - Authentication
   - Production configuration
   - Deployment
 
 CHECKPOINT STATUS:
 
-The backend environment is now fully reproducible.
-The project can be cloned and restored on another machine without reinstalling tools.
-This marks the end of the foundational setup phase.
+Phase 1 complete. The backend is a fully functional REST API.
+Tasks can be created, read, updated, and deleted via HTTP.
+Data is persisted in tasks.db (SQLite).
+All endpoints verified via Swagger UI.
+Ready to begin frontend development.
 
 ================================================================================
   7. HOW TO RESUME AFTER A BREAK
