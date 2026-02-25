@@ -116,23 +116,24 @@ Status: COMPLETE ✓
 PHASE 2 — FRONTEND INITIALISATION
 ----------------------------------------------------------------------
 
-  [ ] Create Angular project inside frontend/
-  [ ] Run Angular dev server
-  [ ] Basic layout scaffold
-  [ ] Angular service for API communication
-  [ ] First GET request to FastAPI backend
-  [ ] Display backend response in UI
+  [✔] Create Angular project inside frontend/
+  [✔] Run Angular dev server
+  [✔] Basic layout scaffold
+  [✔] Angular service for API communication
+  [✔] First GET request to FastAPI backend
+  [✔] Display backend response in UI
 
 Goal: Full-stack communication verified.
+Status: COMPLETE ✓
 
 ----------------------------------------------------------------------
 PHASE 3 — FEATURE DEVELOPMENT
 ----------------------------------------------------------------------
 
-  [ ] Task list UI
-  [ ] Task creation form
-  [ ] Mark task complete
-  [ ] Delete task
+  [✔] Task list UI
+  [✔] Task creation form
+  [✔] Mark task complete
+  [✔] Delete task
   [ ] Basic UI styling improvements
 
 ----------------------------------------------------------------------
@@ -505,29 +506,31 @@ The Angular project will be created inside it in the next phase.
 
   🟡 READY TO CONTINUE
 
-Currently entering: Phase 2 — Frontend Initialisation
+Currently entering: Phase 3 (remainder) — UI Styling
 
 Immediate focus:
-  - Initialise Angular project inside frontend/
-  - Run Angular dev server
-  - Create Angular service for API communication
-  - Connect Angular → FastAPI via HTTP
+  - Basic styling for task list, buttons, and layout
 
   ❌ NOT STARTED (INTENTIONAL)
   ------------------------------
-  - Angular app creation
-  - Frontend ↔ Backend integration
+  - UI styling
   - Authentication
   - Production configuration
   - Deployment
 
 CHECKPOINT STATUS:
 
-Phase 1 complete. The backend is a fully functional REST API.
-Tasks can be created, read, updated, and deleted via HTTP.
-Data is persisted in tasks.db (SQLite).
-All endpoints verified via Swagger UI.
-Ready to begin frontend development.
+Phase 2 complete. Angular is initialised and fully connected to the FastAPI backend.
+Full CRUD works end-to-end from the browser:
+  - Tasks load on page refresh (persistent via SQLite)
+  - Tasks can be created via the Add form
+  - Tasks can be marked complete/incomplete via checkbox
+  - Tasks can be deleted via button
+
+Key technical note:
+  Angular signals (signal<Task[]>) were required for reliable change detection in Angular 21.
+  Plain array assignment with zone-based change detection did not trigger view updates
+  reliably on HTTP response. Switching to signals resolved this completely.
 
 ================================================================================
   7. HOW TO RESUME AFTER A BREAK

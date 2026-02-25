@@ -30,7 +30,15 @@ productivity-app/
 │       ├── models.py        # Pydantic schemas (API data shapes)
 │       ├── database.py      # SQLite connection, SQLAlchemy table definition
 │       └── crud.py          # Database logic (Create, Read, Update, Delete)
-├── frontend/                # Empty (Angular not initialised yet)
+├── frontend/
+│   └── src/
+│       └── app/
+│           ├── app.ts           # Root component — task list, add, toggle, delete logic
+│           ├── app.html         # Root template — task list UI
+│           ├── app.css          # Root component styles
+│           ├── app.config.ts    # Angular app config — providers (HttpClient, Router)
+│           ├── app.routes.ts    # Route definitions (empty for now)
+│           └── task.service.ts  # Angular service — all HTTP calls to FastAPI
 ├── Miscellaneous/
 │   └── backend-code-reference.md  # Plain-language code explanation
 ├── environment.yml          # Portable Conda snapshot
@@ -153,7 +161,7 @@ Backend fully working and verified via Swagger.
 
 ---
 
-## 5. Frontend Tooling (Not Yet Initialised)
+## 5. Frontend (Angular)
 
 Node management:
 - nvm 0.39.7
@@ -165,9 +173,39 @@ Node:
 Angular CLI:
 - Version: 21.1.4 (global)
 
-Frontend folder:
-- Currently empty by design
-- Angular project not yet created
+Angular project initialised with:
+
+ng new productivity-app --directory frontend
+
+### Frontend Application
+
+Phase 2 complete. The frontend is a working Angular app connected to the FastAPI backend.
+
+Files:
+- frontend/src/app/app.ts           — Root component. Uses Angular signals. Handles all task operations.
+- frontend/src/app/app.html         — Template. Task list, add input, checkboxes, delete buttons.
+- frontend/src/app/app.config.ts    — Registers provideHttpClient() and provideRouter().
+- frontend/src/app/task.service.ts  — Service layer. All HTTP calls to the backend API.
+
+Key implementation notes:
+- Uses Angular signals (signal<Task[]>) for reactive state — required for reliable change detection in Angular 21
+- HttpClient injected via constructor in TaskService
+- Tasks load on ngOnInit via getTasks(); view updates via tasks.set()
+- addTask() pushes new task to signal with tasks.update(current => [...current, task])
+- toggleComplete() patches the task in the signal array using tasks.update() with .map()
+- deleteTask() removes task from signal array using tasks.update() with .filter()
+
+Run frontend:
+
+cd ~/Projects/dev/productivity-app/frontend
+ng serve
+
+Verify:
+
+http://localhost:4200
+
+Status:
+Frontend fully working. Full CRUD verified from the browser.
 
 ---
 
@@ -196,15 +234,22 @@ python -m pip freeze > requirements.txt
 
 ## 7. Returning After a Break
 
-Run:
+Two servers need to run simultaneously — open two terminal tabs.
+
+Tab 1 — Backend:
 
 conda activate productivity_app1
 cd ~/Projects/dev/productivity-app/backend
 uvicorn app.main:app --reload
 
+Tab 2 — Frontend:
+
+cd ~/Projects/dev/productivity-app/frontend
+ng serve
+
 Then open:
 
-http://127.0.0.1:8000
+http://localhost:4200
 
 No reinstall required.
 
@@ -219,8 +264,15 @@ No reinstall required.
 ✅ Pydantic data models defined
 ✅ SQLite database connected (SQLAlchemy)
 ✅ Full CRUD API built and verified via Swagger
-🟡 Angular not yet initialised
-❌ Frontend ↔ backend integration not started
+✅ Angular project initialised
+✅ Angular service created (HttpClient, all CRUD methods)
+✅ Frontend ↔ backend integration working
+✅ Task list displays on page load
+✅ Add task via browser form
+✅ Mark task complete via checkbox
+✅ Delete task via button
+🟡 No styling applied yet
+❌ Phase 4 (hardening, auth, deployment) not started
 
 ================================================================================
   END OF DOCUMENT

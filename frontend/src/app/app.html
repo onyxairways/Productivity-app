@@ -1,0 +1,14 @@
+<h1>My Tasks</h1>
+
+<div>
+  <input #titleInput placeholder="Task title" />
+  <button (click)="addTask(titleInput.value); titleInput.value = ''">Add</button>
+</div>
+
+<ul>
+  <li *ngFor="let task of tasks()">
+    <input type="checkbox" [checked]="task.completed" (change)="toggleComplete(task)" />
+    {{ task.title }} — {{ task.completed ? 'Done' : 'Pending' }}
+    <button (click)="deleteTask(task.id)">Delete</button>
+  </li>
+</ul>
