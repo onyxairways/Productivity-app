@@ -26,6 +26,14 @@ def root():
 def read_tasks(db: Session = Depends(database.get_db)):
     return crud.get_tasks(db)
 
+@app.get("/tasks/{task_id}", response_model=TaskResponse)
+def read_task(task_id: int, db: Session = Depends(database.get_db)):
+    task = crud.get_task(db, task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+
 @app.post("/tasks", response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(database.get_db)):
     return crud.create_task(db, task)

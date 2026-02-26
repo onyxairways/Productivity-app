@@ -1,0 +1,16 @@
+<h1>My Tasks</h1>
+
+<div class="add-form">
+  <input #titleInput placeholder="Task title" />
+  <button (click)="addTask(titleInput.value); titleInput.value = ''">Add</button>
+</div>
+
+<ul>
+  <li *ngFor="let task of tasks()">
+    <input type="checkbox" [checked]="task.completed" (change)="toggleComplete(task)" />
+    <a class="task-title" [class.done]="task.completed" [routerLink]="['/tasks', task.id]">
+      {{ task.title }}
+    </a>
+    <button class="delete-btn" (click)="deleteTask(task.id)">Delete</button>
+  </li>
+</ul>

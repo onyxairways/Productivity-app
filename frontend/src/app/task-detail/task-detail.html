@@ -1,0 +1,13 @@
+<div class="detail-container" *ngIf="task()">
+  <a routerLink="/">← Back to tasks</a>
+
+  <h1>{{ task()!.title }}</h1>
+
+  <p class="status">{{ task()!.completed ? 'Done' : 'Pending' }}</p>
+
+  <div class="description-section">
+    <h2>Description</h2>
+    <p *ngIf="task()!.description; else noDesc">{{ task()!.description }}</p>
+    <ng-template #noDesc><p class="empty">No description yet.</p></ng-template>
+  </div>
+</div>
