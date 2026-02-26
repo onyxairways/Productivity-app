@@ -27,4 +27,12 @@ export class TaskDetailComponent implements OnInit {
       this.description.set(task.description ?? '');
     });
   }
+
+  saveDescription(): void {
+    const task = this.task();
+    if (!task) return;
+    this.taskService.updateDescription(task.id, this.description()).subscribe(updated => {
+      this.task.set(updated);
+    });
+  }
 }

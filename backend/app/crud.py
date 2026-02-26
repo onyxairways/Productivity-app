@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from .database import TaskDB
-from .models import TaskCreate
+from .models import TaskCreate, TaskDescriptionUpdate
+from typing import Optional
+
 
 def get_tasks(db: Session):
     return db.query(TaskDB).all()
@@ -28,4 +30,12 @@ def delete_task(db: Session, task_id: int):
     if db_task:
         db.delete(db_task)
         db.commit()
+    return db_task
+
+def update_description(db: Session, task_id: int, description: Optional[str]):
+    db_task = db.query(TaskDB).filter(TaskDB.id == task_id).first()
+    if db_task:
+        db_task.description = description
+        db.commit()
+        db.refresh(db_task)
     return db_task

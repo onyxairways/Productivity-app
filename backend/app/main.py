@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from . import database, crud
-from .models import TaskCreate, TaskResponse
+from .models import TaskCreate, TaskResponse, TaskDescriptionUpdate
+
 
 database.Base.metadata.create_all(bind=database.engine)
 
@@ -51,3 +52,11 @@ def delete_task(task_id: int, db: Session = Depends(database.get_db)):
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
+
+@app.patch("/tasks/{task_id}", response_model=TaskResponse)
+def update_task_description(task_id: int, update: TaskDescriptionUpdate, db: Session = Depends(database.get_db)):
+    task = crud.update_description(db, task_id, update.description)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
