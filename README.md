@@ -271,8 +271,8 @@ No reinstall required.
 ✅ Add task via browser form
 ✅ Mark task complete via checkbox
 ✅ Delete task via button
-🟡 No styling applied yet
-❌ Phase 4 (hardening, auth, deployment) not started
+✅ Basic UI styling applied (layout, colours, hover states, strikethrough for done tasks)
+🟡 Phase 4 (hardening, auth, deployment) not started
 
 ================================================================================
   END OF DOCUMENT

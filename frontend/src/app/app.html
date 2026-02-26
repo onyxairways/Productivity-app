@@ -1,6 +1,6 @@
 <h1>My Tasks</h1>
 
-<div>
+<div class="add-form">
   <input #titleInput placeholder="Task title" />
   <button (click)="addTask(titleInput.value); titleInput.value = ''">Add</button>
 </div>
@@ -8,7 +8,7 @@
 <ul>
   <li *ngFor="let task of tasks()">
     <input type="checkbox" [checked]="task.completed" (change)="toggleComplete(task)" />
-    {{ task.title }} — {{ task.completed ? 'Done' : 'Pending' }}
-    <button (click)="deleteTask(task.id)">Delete</button>
+    <span class="task-title" [class.done]="task.completed">{{ task.title }}</span>
+    <button class="delete-btn" (click)="deleteTask(task.id)">Delete</button>
   </li>
 </ul>
