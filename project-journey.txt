@@ -135,17 +135,35 @@ PHASE 3 — FEATURE DEVELOPMENT
   [✔] Mark task complete
   [✔] Delete task
   [✔] Basic UI styling improvements
+  [✔] Angular routing (app shell + feature components)
+  [✔] Task detail view (/tasks/:id, lazy loaded)
+  [✔] Editable task description (textarea + Save, persists to DB)
+  [✔] GET /tasks/{id} backend endpoint
+  [✔] PATCH /tasks/{id} backend endpoint
 
 ----------------------------------------------------------------------
-PHASE 4 — PROFESSIONAL HARDENING
+PHASE 4 — AI FEATURE
 ----------------------------------------------------------------------
 
-  [ ] Environment variables strategy
+  [ ] Integrate Claude API into backend (new /tasks/{id}/suggest endpoint)
+  [ ] Add Anthropic Python SDK to backend dependencies
+  [ ] Pass task title to Claude, receive suggested description/steps
+  [ ] Wire up frontend: "Generate with AI" button on task detail page
+  [ ] Display AI-generated content in the description textarea
+
+Goal: User can click a button and have Claude read the task title and
+      suggest a description or step-by-step workflow automatically.
+
+----------------------------------------------------------------------
+PHASE 5 — PROFESSIONAL HARDENING
+----------------------------------------------------------------------
+
+  [ ] Environment variables strategy (API keys out of code)
   [ ] Error handling standardisation
   [ ] Logging strategy
   [ ] Production configuration
   [ ] Deployment
-  [ ] Optional AI-assisted features  
+  [ ] Authentication
 
 ================================================================================
   1. PROJECT VISION
@@ -506,7 +524,7 @@ The Angular project will be created inside it in the next phase.
 
   🟡 READY TO CONTINUE
 
-Currently entering: Phase 4 — Professional Hardening
+Currently entering: Phase 4 — AI Feature (Claude API integration)
 
   ❌ NOT STARTED (INTENTIONAL)
   ------------------------------
@@ -516,17 +534,26 @@ Currently entering: Phase 4 — Professional Hardening
 
 CHECKPOINT STATUS:
 
-Phase 2 complete. Angular is initialised and fully connected to the FastAPI backend.
-Full CRUD works end-to-end from the browser:
+Phases 2–3 complete. Full-stack app working end-to-end with routing and persistence.
   - Tasks load on page refresh (persistent via SQLite)
   - Tasks can be created via the Add form
   - Tasks can be marked complete/incomplete via checkbox
   - Tasks can be deleted via button
+  - Clicking a task title navigates to /tasks/:id (Angular routing)
+  - Task detail page shows title, status, and editable description textarea
+  - Descriptions save to the database via PATCH /tasks/{id}
+  - Task detail component is lazy loaded (separate JS chunk)
 
-Key technical note:
-  Angular signals (signal<Task[]>) were required for reliable change detection in Angular 21.
-  Plain array assignment with zone-based change detection did not trigger view updates
-  reliably on HTTP response. Switching to signals resolved this completely.
+Key technical notes:
+  Angular signals (signal<Task[]>, signal<Task | null>) required for reliable change
+  detection in Angular 21. Plain array assignment did not trigger view updates.
+
+  Angular routing required splitting the App component into a routing shell
+  (app.ts + app.html just contain <router-outlet />) and separate feature
+  components: TaskListComponent and TaskDetailComponent.
+
+  Lazy loading via loadComponent + dynamic import() means the task-detail JS
+  chunk is only downloaded when the user first navigates to a task detail page.
 
 ================================================================================
   7. HOW TO RESUME AFTER A BREAK

@@ -27,18 +27,25 @@ productivity-app/
 │   └── app/
 │       ├── __init__.py      # Marks app/ as a Python package
 │       ├── main.py          # FastAPI app, CORS, all API routes
-│       ├── models.py        # Pydantic schemas (API data shapes)
+│       ├── models.py        # Pydantic schemas (TaskCreate, TaskDescriptionUpdate, TaskResponse)
 │       ├── database.py      # SQLite connection, SQLAlchemy table definition
-│       └── crud.py          # Database logic (Create, Read, Update, Delete)
+│       └── crud.py          # Database logic (Create, Read, Update, Delete, UpdateDescription)
 ├── frontend/
 │   └── src/
 │       └── app/
-│           ├── app.ts           # Root component — task list, add, toggle, delete logic
-│           ├── app.html         # Root template — task list UI
-│           ├── app.css          # Root component styles
-│           ├── app.config.ts    # Angular app config — providers (HttpClient, Router)
-│           ├── app.routes.ts    # Route definitions (empty for now)
-│           └── task.service.ts  # Angular service — all HTTP calls to FastAPI
+│           ├── app.ts               # Routing shell — just RouterOutlet
+│           ├── app.html             # Just <router-outlet />
+│           ├── app.config.ts        # Angular app config — providers (HttpClient, Router)
+│           ├── app.routes.ts        # Route definitions (/ and /tasks/:id lazy loaded)
+│           ├── task.service.ts      # Angular service — all HTTP calls to FastAPI
+│           ├── task-list/
+│           │   ├── task-list.ts     # Task list component — all CRUD logic
+│           │   ├── task-list.html   # Task list template — titles link to detail view
+│           │   └── task-list.css    # Task list styles
+│           └── task-detail/
+│               ├── task-detail.ts   # Task detail component — loads task, saves description
+│               ├── task-detail.html # Detail template — title, status, editable description
+│               └── task-detail.css  # Task detail styles
 ├── Miscellaneous/
 │   └── backend-code-reference.md  # Plain-language code explanation
 ├── environment.yml          # Portable Conda snapshot
@@ -131,20 +138,22 @@ Phase 1 complete. The backend is a fully functional REST API with persistent SQL
 
 Files:
 - backend/app/main.py      — FastAPI app, CORS middleware, all API routes
-- backend/app/models.py    — Pydantic schemas: TaskCreate (input), TaskResponse (output)
+- backend/app/models.py    — Pydantic schemas: TaskCreate, TaskDescriptionUpdate, TaskResponse
 - backend/app/database.py  — SQLite setup via SQLAlchemy, TaskDB table, get_db() session dependency
-- backend/app/crud.py      — get_tasks, get_task, create_task, update_task, delete_task
+- backend/app/crud.py      — get_tasks, get_task, create_task, update_task, delete_task, update_description
 - backend/app/__init__.py  — empty file that marks app/ as a Python package
 
 Database file (auto-created on first run):
 - backend/tasks.db
 
 API endpoints:
-- GET    /           → health check
-- GET    /tasks      → return all tasks
-- POST   /tasks      → create a new task
-- PUT    /tasks/{id} → update completed status
-- DELETE /tasks/{id} → delete a task
+- GET    /               → health check
+- GET    /tasks          → return all tasks
+- GET    /tasks/{id}     → return single task by ID
+- POST   /tasks          → create a new task
+- PUT    /tasks/{id}     → update completed status
+- PATCH  /tasks/{id}     → update task description
+- DELETE /tasks/{id}     → delete a task
 
 Run backend:
 
@@ -179,21 +188,27 @@ ng new productivity-app --directory frontend
 
 ### Frontend Application
 
-Phase 2 complete. The frontend is a working Angular app connected to the FastAPI backend.
+Phases 2–4 complete. The frontend is a working Angular app with routing, task list, and task detail view.
 
 Files:
-- frontend/src/app/app.ts           — Root component. Uses Angular signals. Handles all task operations.
-- frontend/src/app/app.html         — Template. Task list, add input, checkboxes, delete buttons.
-- frontend/src/app/app.config.ts    — Registers provideHttpClient() and provideRouter().
-- frontend/src/app/task.service.ts  — Service layer. All HTTP calls to the backend API.
+- frontend/src/app/app.ts                    — Routing shell. Contains only RouterOutlet.
+- frontend/src/app/app.html                  — Just <router-outlet />.
+- frontend/src/app/app.config.ts             — Registers provideHttpClient() and provideRouter().
+- frontend/src/app/app.routes.ts             — Routes: / → TaskListComponent, /tasks/:id → TaskDetailComponent (lazy loaded).
+- frontend/src/app/task.service.ts           — Service layer. All HTTP calls to the backend API.
+- frontend/src/app/task-list/task-list.ts    — Task list component. All CRUD logic with Angular signals.
+- frontend/src/app/task-list/task-list.html  — Task list template. Task titles are links to detail view.
+- frontend/src/app/task-list/task-list.css   — Task list styles.
+- frontend/src/app/task-detail/task-detail.ts   — Detail component. Loads task by ID, saves description.
+- frontend/src/app/task-detail/task-detail.html — Detail template. Title, status, editable description textarea.
+- frontend/src/app/task-detail/task-detail.css  — Detail view styles.
 
 Key implementation notes:
-- Uses Angular signals (signal<Task[]>) for reactive state — required for reliable change detection in Angular 21
-- HttpClient injected via constructor in TaskService
-- Tasks load on ngOnInit via getTasks(); view updates via tasks.set()
-- addTask() pushes new task to signal with tasks.update(current => [...current, task])
-- toggleComplete() patches the task in the signal array using tasks.update() with .map()
-- deleteTask() removes task from signal array using tasks.update() with .filter()
+- Uses Angular signals (signal<Task[]>, signal<Task | null>) for reactive state
+- App component is a pure routing shell — all logic lives in feature components
+- TaskDetailComponent uses lazy loading (loadComponent with dynamic import())
+- Description textarea uses [ngModel]="description()" (ngModelChange)="description.set($event)" for signal compatibility
+- Clicking a task title navigates to /tasks/:id — Angular Router reads the ID via ActivatedRoute
 
 Run frontend:
 
@@ -272,7 +287,13 @@ No reinstall required.
 ✅ Mark task complete via checkbox
 ✅ Delete task via button
 ✅ Basic UI styling applied (layout, colours, hover states, strikethrough for done tasks)
-🟡 Phase 4 (hardening, auth, deployment) not started
+✅ Angular routing implemented (app split into routing shell + feature components)
+✅ Task detail view — click task title to navigate to /tasks/:id
+✅ Task detail lazy loaded (separate JS chunk, only loads when needed)
+✅ Editable task description — textarea with Save button, persists to SQLite
+✅ GET /tasks/{id} and PATCH /tasks/{id} backend endpoints added
+🟡 Next: AI-assisted description generation (Claude API integration)
+❌ Phase 4 hardening (env variables, error handling, auth, deployment) not started
 
 ================================================================================
   END OF DOCUMENT
