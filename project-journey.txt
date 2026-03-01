@@ -145,14 +145,37 @@ PHASE 3 — FEATURE DEVELOPMENT
 PHASE 4 — AI FEATURE
 ----------------------------------------------------------------------
 
-  [ ] Integrate Claude API into backend (new /tasks/{id}/suggest endpoint)
-  [ ] Add Anthropic Python SDK to backend dependencies
-  [ ] Pass task title to Claude, receive suggested description/steps
-  [ ] Wire up frontend: "Generate with AI" button on task detail page
-  [ ] Display AI-generated content in the description textarea
+  [✔] Create backend/.env file to store ANTHROPIC_API_KEY securely
+  [✔] Add anthropic and python-dotenv to pip packages
+  [✔] Add load_dotenv() to main.py to read .env at startup
+  [✔] POST /tasks/{id}/suggest endpoint — calls Claude, returns suggestion
+  [✔] Tested via Swagger — 200 response with generated description confirmed
+  [✔] suggestDescription() method added to task.service.ts
+  [✔] generateDescription() method added to task-detail.ts
+  [✔] "Generate with AI" button added to task-detail.html
+  [✔] Textarea resized and buttons styled in task-detail.css
+  [~] Clarifying questions feature (in progress — session paused here):
+        [ ] Add SuggestRequest model to models.py (Optional[List[str]] answers)
+        [ ] Add POST /tasks/{id}/questions endpoint to main.py
+              → Claude returns 2 short clarifying questions for the task title
+        [ ] Update POST /tasks/{id}/suggest to accept SuggestRequest body
+              → Prompt includes question/answer pairs if provided
+        [ ] Add getQuestions() method to task.service.ts
+        [ ] Update suggestDescription() in task.service.ts to accept answers[]
+        [ ] Update task-detail.ts:
+              → Add questions = signal<string[]>([])
+              → Add answers = signal<string[]>([])
+              → Add fetchQuestions() method
+              → Update generateDescription() to pass answers
+        [ ] Update task-detail.html:
+              → Show question inputs after fetchQuestions() returns
+              → "Generate Description" button submits answers
 
-Goal: User can click a button and have Claude read the task title and
-      suggest a description or step-by-step workflow automatically.
+Goal: User clicks "Generate with AI", sees 2 clarifying questions, answers
+      them, then clicks "Generate Description" — Claude uses the answers to
+      write a personalised, accurate description for the task.
+
+Status: Core AI feature working. Clarifying questions feature mid-build.
 
 ----------------------------------------------------------------------
 PHASE 5 — PROFESSIONAL HARDENING

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+
 
 class TaskCreate(BaseModel):
     title: str
@@ -17,3 +18,7 @@ class TaskResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class SuggestRequest(BaseModel):
+    answers: Optional[List[str]] = []
+
