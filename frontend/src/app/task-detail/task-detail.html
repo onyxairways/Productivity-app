@@ -14,5 +14,20 @@
       rows="5">
     </textarea>
     <button class="save-btn" (click)="saveDescription()">Save</button>
+    <button class="generate-btn" (click)="fetchQuestions()">Generate with AI</button>
+  </div>
+
+  <div class="questions-section" *ngIf="questions().length > 0">
+    <h2>Help Claude understand your task</h2>
+    <div *ngFor="let q of questions(); let i = index" class="question-item">
+      <label>{{ q }}</label>
+      <input
+        type="text"
+        [value]="answers()[i]"
+        (input)="updateAnswer(i, $any($event.target).value)"
+        placeholder="Your answer..."
+      />
+    </div>
+    <button class="generate-desc-btn" (click)="generateDescription()">Generate Description</button>
   </div>
 </div>
