@@ -148,34 +148,24 @@ PHASE 4 — AI FEATURE
   [✔] Create backend/.env file to store ANTHROPIC_API_KEY securely
   [✔] Add anthropic and python-dotenv to pip packages
   [✔] Add load_dotenv() to main.py to read .env at startup
-  [✔] POST /tasks/{id}/suggest endpoint — calls Claude, returns suggestion
-  [✔] Tested via Swagger — 200 response with generated description confirmed
-  [✔] suggestDescription() method added to task.service.ts
-  [✔] generateDescription() method added to task-detail.ts
-  [✔] "Generate with AI" button added to task-detail.html
-  [✔] Textarea resized and buttons styled in task-detail.css
-  [~] Clarifying questions feature (in progress — session paused here):
-        [ ] Add SuggestRequest model to models.py (Optional[List[str]] answers)
-        [ ] Add POST /tasks/{id}/questions endpoint to main.py
-              → Claude returns 2 short clarifying questions for the task title
-        [ ] Update POST /tasks/{id}/suggest to accept SuggestRequest body
-              → Prompt includes question/answer pairs if provided
-        [ ] Add getQuestions() method to task.service.ts
-        [ ] Update suggestDescription() in task.service.ts to accept answers[]
-        [ ] Update task-detail.ts:
-              → Add questions = signal<string[]>([])
-              → Add answers = signal<string[]>([])
-              → Add fetchQuestions() method
-              → Update generateDescription() to pass answers
-        [ ] Update task-detail.html:
-              → Show question inputs after fetchQuestions() returns
-              → "Generate Description" button submits answers
+  [✔] POST /tasks/{id}/questions endpoint — Claude returns 2 clarifying questions
+  [✔] POST /tasks/{id}/suggest endpoint — context-aware generation with answers
+        → Detects task type: email/letter → draft, procedural → steps, other → description
+  [✔] SuggestRequest model added to models.py
+  [✔] getQuestions() and updated suggestDescription() in task.service.ts
+  [✔] fetchQuestions(), updateAnswer(), generateDescription() in task-detail.ts
+  [✔] Two-step AI UI in task-detail.html:
+        → "Generate with AI" → questions appear → user answers → "Generate Description"
+  [✔] Questions section styled with labelled inputs and green Generate button
+  [✔] Textarea resized (min-height 160px) and all buttons styled
+  [✔] requirements.txt updated to include anthropic and python-dotenv
+  [✔] Committed and pushed to GitHub
 
-Goal: User clicks "Generate with AI", sees 2 clarifying questions, answers
-      them, then clicks "Generate Description" — Claude uses the answers to
-      write a personalised, accurate description for the task.
+Goal: User clicks "Generate with AI", answers 2 clarifying questions, then
+      clicks "Generate Description" — Claude produces a personalised, task-aware
+      response (email draft, step-by-step instructions, or description).
 
-Status: Core AI feature working. Clarifying questions feature mid-build.
+Status: COMPLETE ✓
 
 ----------------------------------------------------------------------
 PHASE 5 — PROFESSIONAL HARDENING
