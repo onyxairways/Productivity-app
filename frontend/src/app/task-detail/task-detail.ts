@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ export class TaskDetailComponent implements OnInit {
     description = signal('');
     questions = signal<string[]>([]);
     answers = signal<string[]>([]);
-
+    @ViewChild('descriptionTextarea') textareaRef!: ElementRef<HTMLTextAreaElement>;
 
     constructor(
         private route: ActivatedRoute,
@@ -28,7 +28,14 @@ export class TaskDetailComponent implements OnInit {
         this.taskService.getTask(id).subscribe(task => {
             this.task.set(task);
             this.description.set(task.description ?? '');
+            setTimeout(() => this.autoResize(), 0);
         });
+    }
+
+    autoResize(): void {
+        const textarea = this.textareaRef.nativeElement;
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight + 72) + 'px';
     }
 
     saveDescription(): void {
@@ -61,6 +68,7 @@ export class TaskDetailComponent implements OnInit {
             this.description.set(result.suggestion);
             this.questions.set([]);
             this.answers.set([]);
+            setTimeout(() => this.autoResize(), 0);
         });
     }
 

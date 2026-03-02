@@ -45,7 +45,8 @@ textarea {
   border-radius: 6px;
   font-size: 0.95rem;
   resize: vertical;
-  min-height: 160px;
+  min-height: 300px;
+  overflow: hidden;
   box-sizing: border-box;
 }
 

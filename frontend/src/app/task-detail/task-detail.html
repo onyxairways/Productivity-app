@@ -8,10 +8,11 @@
   <div class="description-section">
     <h2>Description</h2>
     <textarea
+      #descriptionTextarea
       [ngModel]="description()"
       (ngModelChange)="description.set($event)"
-      placeholder="Add a description..."
-      rows="5">
+      (input)="autoResize()"
+      placeholder="Add a description...">
     </textarea>
     <button class="save-btn" (click)="saveDescription()">Save</button>
     <button class="generate-btn" (click)="fetchQuestions()">Generate with AI</button>
