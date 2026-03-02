@@ -1,6 +1,6 @@
 # Productivity App – Environment & Setup Reference
 
-> This README reflects the current, verified state of the project as of February 2026.
+> This README reflects the current, verified state of the project as of March 2026.
 > It is the operational source of truth for running and restoring the project.
 
 ---
@@ -14,7 +14,7 @@ A full-stack productivity application built to:
 - Learn modern backend development with FastAPI (Python)
 - Learn frontend development with Angular
 - Understand real-world full-stack architecture
-- Add AI features later once the core stack is stable
+- Build AI features using the Claude API (Anthropic)
 
 Project root:
 
@@ -27,9 +27,10 @@ productivity-app/
 │   └── app/
 │       ├── __init__.py      # Marks app/ as a Python package
 │       ├── main.py          # FastAPI app, CORS, all API routes
-│       ├── models.py        # Pydantic schemas (TaskCreate, TaskDescriptionUpdate, TaskResponse)
+│       ├── models.py        # Pydantic schemas (TaskCreate, TaskDescriptionUpdate, TaskResponse, SuggestRequest)
 │       ├── database.py      # SQLite connection, SQLAlchemy table definition
-│       └── crud.py          # Database logic (Create, Read, Update, Delete, UpdateDescription)
+│       ├── crud.py          # Database logic (Create, Read, Update, Delete, UpdateDescription)
+│       └── .env             # ANTHROPIC_API_KEY — not committed to git
 ├── frontend/
 │   └── src/
 │       └── app/
@@ -112,6 +113,8 @@ Core stack:
 - fastapi 0.129.0
 - uvicorn 0.41.0
 - sqlalchemy (installed during Phase 1)
+- anthropic (Claude API SDK)
+- python-dotenv (reads .env file at startup)
 
 Additional dependencies installed automatically:
 - starlette
@@ -142,18 +145,21 @@ Files:
 - backend/app/database.py  — SQLite setup via SQLAlchemy, TaskDB table, get_db() session dependency
 - backend/app/crud.py      — get_tasks, get_task, create_task, update_task, delete_task, update_description
 - backend/app/__init__.py  — empty file that marks app/ as a Python package
+- backend/.env             — stores ANTHROPIC_API_KEY (not in git, never commit this)
 
 Database file (auto-created on first run):
 - backend/tasks.db
 
 API endpoints:
-- GET    /               → health check
-- GET    /tasks          → return all tasks
-- GET    /tasks/{id}     → return single task by ID
-- POST   /tasks          → create a new task
-- PUT    /tasks/{id}     → update completed status
-- PATCH  /tasks/{id}     → update task description
-- DELETE /tasks/{id}     → delete a task
+- GET    /                        → health check
+- GET    /tasks                   → return all tasks
+- GET    /tasks/{id}              → return single task by ID
+- POST   /tasks                   → create a new task
+- PUT    /tasks/{id}              → update completed status
+- PATCH  /tasks/{id}              → update task description
+- DELETE /tasks/{id}              → delete a task
+- POST   /tasks/{id}/questions    → Claude generates 2 clarifying questions for the task
+- POST   /tasks/{id}/suggest      → Claude generates context-aware content (email draft, steps, or description)
 
 Run backend:
 
@@ -165,8 +171,14 @@ Verify:
 http://127.0.0.1:8000
 http://127.0.0.1:8000/docs
 
+AI notes:
+- Model used: claude-haiku-4-5-20251001 (fast, low cost)
+- API key stored in backend/.env — loaded at startup via python-dotenv
+- Questions endpoint strips numbering from Claude's response before returning
+- Suggest endpoint detects task type and responds with a draft, steps, or description
+
 Status:
-Backend fully working and verified via Swagger.
+Backend fully working and verified via Swagger. AI endpoints tested and working.
 
 ---
 
@@ -209,6 +221,9 @@ Key implementation notes:
 - TaskDetailComponent uses lazy loading (loadComponent with dynamic import())
 - Description textarea uses [ngModel]="description()" (ngModelChange)="description.set($event)" for signal compatibility
 - Clicking a task title navigates to /tasks/:id — Angular Router reads the ID via ActivatedRoute
+- Textarea auto-resizes with content using ViewChild + scrollHeight — deferred with setTimeout to wait for Angular to render
+- AI flow is two-step: "Generate with AI" fetches questions → user answers → "Generate Description" sends answers to Claude
+- app.css is intentionally empty — all styles live in task-list.css and task-detail.css
 
 Run frontend:
 
@@ -292,8 +307,18 @@ No reinstall required.
 ✅ Task detail lazy loaded (separate JS chunk, only loads when needed)
 ✅ Editable task description — textarea with Save button, persists to SQLite
 ✅ GET /tasks/{id} and PATCH /tasks/{id} backend endpoints added
-🟡 Next: AI-assisted description generation (Claude API integration)
-❌ Phase 4 hardening (env variables, error handling, auth, deployment) not started
+✅ Claude API integrated (anthropic + python-dotenv installed, .env configured)
+✅ POST /tasks/{id}/questions — Claude returns 2 clarifying questions
+✅ POST /tasks/{id}/suggest — Claude returns context-aware content (email draft, steps, or description)
+✅ Two-step AI flow in Angular: Generate with AI → answer questions → Generate Description
+✅ Textarea auto-resizes with content (ViewChild + scrollHeight)
+✅ Duplicate styles removed from app.css (all styles now in feature component CSS files)
+🟡 Next: Phase 5 — Professional Hardening
+   - Error handling (user-facing messages when API calls fail)
+   - Logging strategy
+   - Authentication
+   - Production configuration
+   - Deployment
 
 ================================================================================
   END OF DOCUMENT
